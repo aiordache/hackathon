@@ -18,7 +18,7 @@ func main() {
 	ctx, closeFunc := newSigContext()
 	defer closeFunc()
 	plugin.Run(func(dockerCli command.Cli) *cobra.Command {
-		cmd := rootCommand(ctx)
+		cmd := commands.RootCommand(ctx)
 		originalPreRun := cmd.PersistentPreRunE
 		cmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
 			if err := plugin.PersistentPreRunE(cmd, args); err != nil {
@@ -35,16 +35,6 @@ func main() {
 		Vendor:        "Docker Inc.",
 		Version:       commands.Version,
 	})
-}
-
-func rootCommand(ctx context.Context) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:    "run",
-		Short:  "Docker run ++",
-		Hidden: true,
-	}
-	cmd.AddCommand(commands.VersionCommand())
-	return cmd
 }
 
 func newSigContext() (context.Context, func()) {
