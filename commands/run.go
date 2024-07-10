@@ -1,7 +1,12 @@
 package commands
 
 import (
+	"bytes"
 	"context"
+	"errors"
+	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/aiordache/hackathon/pkg/compose"
 	"github.com/spf13/cobra"
@@ -28,8 +33,17 @@ func RootCommand(ctx context.Context) *cobra.Command {
 
 func runRun(ctx context.Context, opts runOptions) error {
 	image := opts.image
-	if ok, err := compose.IsDockerComposeImage(ctx, image, ""); err == nil && ok {
-		// do something
+	fmt.Printf("Running image %s\n", image)
+	b, err := compose.EmbeddedCompose(ctx, image)
+	if err != nil {
+		if errors.Is(err, compose.ErrLayerNotFound) {
+			// do regular run command
+		}
+		return err
 	}
-	return nil
+	cmd := exec.Command("docker", "compose", "up", "-f", "-")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = bytes.NewReader(b)
+	return cmd.Start()
 }
