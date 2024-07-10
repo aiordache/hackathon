@@ -41,7 +41,7 @@ func runRun(ctx context.Context, opts runOptions) error {
 		}
 		return err
 	}
-	cmd := exec.Command("docker", "compose", "up", "-f", "-")
+	cmd := exec.Command("docker", "compose", "-f", "-", "up")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = bytes.NewReader(b)
