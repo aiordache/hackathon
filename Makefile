@@ -12,7 +12,7 @@ GO_BUILD=$(STATIC_FLAGS) go build -trimpath -ldflags=$(LDFLAGS)
 
 bin: ## Build the binary for the current plarform
 	@echo "Building..."
-	$(GO_BUILD) -o "bin/$(BINARY)$(EXTENSION)" ./cmd
+	$(GO_BUILD) -o "bin/$(BINARY)$(EXTENSION)" .
 
 logster: 
 	docker build --tag=run .
