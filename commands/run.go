@@ -31,12 +31,12 @@ func RunCommand(ctx context.Context) *cobra.Command {
 
 func runRun(ctx context.Context, opts runOptions) error {
 	image := opts.imageName
-	fmt.Printf("Running image %s\n", image)
+	fmt.Printf("Running %s\n", image)
 	b, err := compose.EmbeddedCompose(ctx, image)
 	if err != nil {
-		return err
+		return fmt.Errorf("not a compose image: %s", err.Error())
 	}
-	cmd := exec.Command("docker", "compose", "-f", "-", "up")
+	cmd := exec.Command("docker", "compose", "-f", "-", "up", "-d")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = bytes.NewReader(b)
