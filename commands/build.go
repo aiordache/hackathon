@@ -33,7 +33,7 @@ func BuildCommand(ctx context.Context) *cobra.Command {
 
 func runBuild(ctx context.Context, opts buildOptions) error {
 	composeFile := opts.composeFilePath
-	if !strings.HasSuffix(opts.composeFilePath, ".yaml") || !strings.HasSuffix(opts.composeFilePath, ".yml") {
+	if !strings.HasSuffix(opts.composeFilePath, ".yaml") && !strings.HasSuffix(opts.composeFilePath, ".yml") {
 		composeFile = filepath.Join(opts.composeFilePath, "docker-compose.yaml")
 		if _, err := os.Stat(composeFile); err != nil {
 			composeFile = filepath.Join(opts.composeFilePath, "docker-compose.yml")
